@@ -38,7 +38,7 @@ impl_rdp! {
         _langtag              = _{ ["@"] ~ langtag }
         _string_literal_quote = _{ ["\""] ~ string_literal_quote ~ ["\""] }
 
-        blank_node_label =     { (pn_chars_u | ascii_digits) ~ pn_chars? ~ (["."]* ~ pn_chars)+ }
+        blank_node_label =     { (pn_chars_u | ascii_digits) ~ pn_chars? ~ (["."]* ~ pn_chars)* }
         iriref =               { iriref_symbol* }
         literal =              { _string_literal_quote ~ (["^^"] ~ (_iriref | _langtag))? }
 
