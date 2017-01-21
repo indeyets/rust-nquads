@@ -7,11 +7,19 @@ use std::collections::LinkedList;
 
 
 #[derive(Debug)]
+#[derive(PartialEq)]
+pub enum Node {
+    BlankNodeLabel { label: String },
+    IriRef { iri: String },
+    Literal { literal: String, kind: String, language: String },
+}
+
+#[derive(Debug)]
 pub struct Quad {
-    pub subject:     String,
-    pub predicate:   String,
-    pub object:      String,
-    pub graph_label: String,
+    pub subject:     Node,
+    pub predicate:   Node,
+    pub object:      Node,
+    pub graph_label: Node,
 }
 
 impl_rdp! {
@@ -86,7 +94,7 @@ impl_rdp! {
             }
         }
 
-        _statement(&self) -> LinkedList<String> {
+        _statement(&self) -> LinkedList<Node> {
             (_: subject, head: _node(), mut tail: _statement()) => {
                 tail.push_front(head);
                 tail
@@ -108,12 +116,12 @@ impl_rdp! {
             }
         }
 
-        _node(&self) -> String {
+        _node(&self) -> Node {
             (&input: blank_node_label) => {
-                input.to_string()
+                Node::BlankNodeLabel { label: input.to_string() }
             },
             (&input: iriref) => {
-                input.to_string()
+                Node::IriRef { iri: input.to_string() }
             }
         }
     }
