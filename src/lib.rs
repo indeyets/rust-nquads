@@ -2,8 +2,11 @@
 #[macro_use]
 extern crate pest;
 
-use pest::prelude::*;
+use std::char;
 use std::collections::LinkedList;
+use std::u32;
+
+use pest::prelude::*;
 
 
 #[derive(Debug)]
@@ -12,6 +15,12 @@ pub enum Node {
     BlankNodeLabel { label: String },
     IriRef { iri: String },
     Literal { literal: String, kind: String, language: String },
+}
+
+impl Node {
+    fn iriref_from_nquads(str: String) -> Node {
+        Node::IriRef { iri: str }
+    }
 }
 
 #[derive(Debug)]
@@ -46,8 +55,11 @@ impl_rdp! {
         string_literal_quote = { (echar | uchar | (!(["\u{22}"] | ["\u{5c}"] | ["\u{a}"] | ["\u{d}"]) ~ any))* }
 
         eol =           _{ (["\n"] | ["\r"])+ }
-        iriref_symbol = _{ uchar | (!(['\u{00}'..'\u{20}'] | ["<"] | [">"] | ["\""] | ["{"] | ["}"] | ["|"] | ["^"] | ["`"] | ["\\"]) ~ any) }
-        uchar =         _{ (["\\u"] ~ hex ~ hex ~ hex ~ hex) | (["\\U"] ~ hex ~ hex ~ hex ~ hex ~ hex ~ hex ~ hex ~ hex) }
+        iriref_symbol = _{ uchar | iriref_char }
+        uchar =         _{ (["\\u"] ~ uchar4 ) | (["\\U"] ~ uchar8 ) }
+        uchar4 =         { hex ~ hex ~ hex ~ hex }
+        uchar8 =         { hex ~ hex ~ hex ~ hex ~ hex ~ hex ~ hex ~ hex }
+        iriref_char =    { (!(['\u{00}'..'\u{20}'] | ["<"] | [">"] | ["\""] | ["{"] | ["}"] | ["|"] | ["^"] | ["`"] | ["\\"]) ~ any) }
         echar =         _{ ["\\"] ~ (["t"] | ["b"] | ["n"] | ["r"] | ["f"] | ["\""] | ["\'"] | ["\\"]) }
         pn_chars_base = _{
             ascii_alpha | ['\u{c0}'..'\u{d6}'] | ['\u{d8}'..'\u{f6}'] | ['\u{f8}'..'\u{2ff}']
@@ -121,8 +133,33 @@ impl_rdp! {
             (&input: blank_node_label) => {
                 Node::BlankNodeLabel { label: input.to_string() }
             },
-            (&input: iriref) => {
-                Node::IriRef { iri: input.to_string() }
+            (_: iriref, input: _iri_chars()) => {
+                Node::iriref_from_nquads(input.chars().rev().collect::<String>())
+            }
+        }
+
+        _iri_chars(&self) -> String {
+            (&chars: uchar4, mut tail: _iri_chars()) => {
+                let num = u32::from_str_radix(chars, 16);
+                let c = char::from_u32(num.unwrap());
+
+                tail.push(c.unwrap());
+
+                tail
+            },
+            (&chars: uchar8, mut tail: _iri_chars()) => {
+                let num = u32::from_str_radix(chars, 16);
+                let c = char::from_u32(num.unwrap());
+
+                tail.push(c.unwrap());
+
+                tail
+            },
+            (&chars: iriref_char, tail: _iri_chars()) => {
+                tail + chars
+            },
+            () => {
+                String::new()
             }
         }
     }
