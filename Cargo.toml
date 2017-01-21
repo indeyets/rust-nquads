@@ -1,0 +1,7 @@
+[package]
+name = "nquads"
+version = "0.1.0"
+authors = ["Alexey Zakhlestin <indeyets@gmail.com>"]
+
+[dependencies]
+pest = "0.4.1"
