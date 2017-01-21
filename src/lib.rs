@@ -15,6 +15,7 @@ pub enum Node {
 }
 
 #[derive(Debug)]
+#[derive(PartialEq)]
 pub struct Quad {
     pub subject:     Node,
     pub predicate:   Node,
