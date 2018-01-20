@@ -30,6 +30,10 @@ fn parse_2_statements() {
 
 #[test]
 fn parse_iri_with_uchars() {
+    let quads = nquads::parse("_:1 <http://example.com/\\u0041\\U00000042> _:2 <http://example.com> .");
+
+    assert_eq!(1, quads.len());
+
     let expectation_0 = Quad {
         subject:        BlankNodeLabel { label: "1".to_string() },
         predicate:      IriRef { iri: "http://example.com/AB".to_string() },
@@ -37,7 +41,5 @@ fn parse_iri_with_uchars() {
         graph_label:    IriRef { iri: "http://example.com".to_string() },
     };
 
-    let quads = nquads::parse("_:1 <http://example.com/\\u0041\\U00000042> _:2 <http://example.com> .");
-    assert_eq!(1, quads.len());
     assert_eq!(expectation_0, quads[0]);
 }

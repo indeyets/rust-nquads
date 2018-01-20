@@ -1,14 +1,48 @@
-[root]
+[[package]]
 name = "nquads"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
- "pest 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pest 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pest_derive 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "pest"
-version = "0.4.1"
+version = "1.0.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "pest_derive"
+version = "1.0.0-rc.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "pest 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "syn 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "quote"
+version = "0.3.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "syn"
+version = "0.10.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+ "unicode-xid 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "unicode-xid"
+version = "0.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [metadata]
-"checksum pest 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3e2e823a5967bb4cdc6d3e46f47baaf4ecfeae44413a642b74ad44e59e49c7f6"
+"checksum pest 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)" = "db7f3627b99404d593124b61af5f7b73d1d4b1cd8c606380242baca93a6c51f9"
+"checksum pest_derive 1.0.0-rc.1 (registry+https://github.com/rust-lang/crates.io-index)" = "285cc1fdf6173ba839d355fa61ff7a41bf69d0ffa45ca4ee9aa2125ce85c2b13"
+"checksum quote 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)" = "7a6e920b65c65f10b2ae65c831a81a073a89edd28c7cce89475bff467ab4167a"
+"checksum syn 0.10.8 (registry+https://github.com/rust-lang/crates.io-index)" = "58fd09df59565db3399efbba34ba8a2fec1307511ebd245d0061ff9d42691673"
+"checksum unicode-xid 0.0.4 (registry+https://github.com/rust-lang/crates.io-index)" = "8c1f860d7d29cf02cb2f3f359fd35991af3d30bac52c57d265a3c461074cb4dc"

@@ -1,7 +1,8 @@
 [package]
 name = "nquads"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Alexey Zakhlestin <indeyets@gmail.com>"]
 
 [dependencies]
-pest = "0.4.1"
+pest = "^1.0.0-rc.1"
+pest_derive = "^1.0.0-rc.1"
