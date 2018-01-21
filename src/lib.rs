@@ -192,3 +192,11 @@ pub fn parse(input: &str) -> Vec<Quad> {
 
     vec
 }
+
+pub fn parse_literal(input: &str) -> Node {
+    let pairs = NQuadsParser::parse(Rule::literal, input).unwrap_or_else(|e| panic!("{}", e));
+    match pairs.clone().next() {
+        Some(literal) => Node::from_literal(literal),
+        None => panic!("no literal found")
+    }
+}
