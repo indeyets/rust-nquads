@@ -36,6 +36,21 @@ impl NQuadsString for String {
 
                     result.push(c.unwrap());
                 },
+                Rule::echar_char => {
+                    let s = match piece.into_span().as_str() {
+                        "t" => { "\t" },
+                        "b" => { "\u{8}" },
+                        "n" => { "\n" },
+                        "r" => { "\r" },
+                        "f" => { "\u{c}" },
+                        "\"" => { "\"" },
+                        "\'" => { "\'" },
+                        "\\" => { "\\" },
+                        _ => unreachable!()
+                    };
+
+                    result += s;
+                },
                 _ => {
                     result += piece.clone().into_span().as_str();
                 }

@@ -62,3 +62,22 @@ fn parse_simple_literal() {
 
     assert_eq!(expectation, quads[0]);
 }
+
+#[test]
+fn parse_literal_with_echars() {
+    let quads = nquads::parse("_:1 <http://example.com/foo> \"\\t\\b\\n\\r\\f\\\"\\'\\\\\" <http://example.com> .");
+    assert_eq!(1, quads.len());
+
+    let expectation = Quad {
+        subject:        BlankNodeLabel { label: "1".to_string() },
+        predicate:      IriRef { iri: "http://example.com/foo".to_string() },
+        object: Literal {
+            literal: "\u{9}\u{8}\u{a}\u{d}\u{c}\u{22}\u{27}\u{5c}".to_string(),
+            kind: "".to_string(),
+            language: "".to_string(),
+        },
+        graph_label:    IriRef { iri: "http://example.com".to_string() },
+    };
+
+    assert_eq!(expectation, quads[0]);
+}
