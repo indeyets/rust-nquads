@@ -68,19 +68,29 @@ impl Node {
 
         let literal = String::from_pair(pieces.next().unwrap());
 
-        let piece2 = pieces.next().unwrap();
-        match piece2.as_rule() {
-            Rule::iriref => Node::Literal {
-                literal,
-                kind: String::from_pair(piece2),
-                language: "".to_owned()
+        match pieces.next() {
+            Some(piece2) => {
+                match piece2.as_rule() {
+                    Rule::iriref => Node::Literal {
+                        literal,
+                        kind: String::from_pair(piece2),
+                        language: "".to_owned()
+                    },
+                    Rule::langtag => Node::Literal {
+                        literal,
+                        kind: "".to_owned(),
+                        language: String::from_pair(piece2)
+                    },
+                    _ => unreachable!()
+                }
             },
-            Rule::langtag => Node::Literal {
-                literal,
-                kind: "".to_owned(),
-                language: String::from_pair(piece2)
-            },
-            _ => unreachable!()
+            None => {
+                Node::Literal {
+                    literal,
+                    kind: "".to_owned(),
+                    language: "".to_owned()
+                }
+            }
         }
     }
 }
