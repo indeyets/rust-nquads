@@ -193,6 +193,14 @@ pub fn parse(input: &str) -> Vec<Quad> {
     vec
 }
 
+pub fn parse_iriref(input: &str) -> Node {
+    let pairs = NQuadsParser::parse(Rule::_iriref, input).unwrap_or_else(|e| panic!("{}", e));
+    match pairs.clone().next() {
+        Some(literal) => Node::from_iriref(literal),
+        None => panic!("no iriref found")
+    }
+}
+
 pub fn parse_literal(input: &str) -> Node {
     let pairs = NQuadsParser::parse(Rule::literal, input).unwrap_or_else(|e| panic!("{}", e));
     match pairs.clone().next() {
