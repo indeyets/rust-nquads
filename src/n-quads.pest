@@ -15,7 +15,7 @@ blank_node_label =     ${ (pn_chars_u | ascii_digits) ~ pn_chars? ~ ("."* ~ pn_c
 iriref =               ${ iriref_symbol* }
 literal =              { _string_literal_quote ~ ("^^" ~ (_iriref | _langtag))? }
 
-langtag =              ${ ascii_alpha+ ~ ("-" ~ (ascii_alpha | ascii_digits))* }
+langtag =              ${ ascii_alpha+ ~ ("-" ~ (ascii_alpha | ascii_digits)+)* }
 string_literal_quote = ${ (echar | uchar | (!("\u{0022}" | "\u{005c}" | "\u{000a}" | "\u{000d}") ~ any))* }
 
 eol =           _{ ("\n" | "\r")+ }

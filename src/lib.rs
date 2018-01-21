@@ -66,8 +66,11 @@ impl NQuadsString for String {
 pub enum Node {
     BlankNodeLabel { label: String },
     IriRef { iri: String },
-    Literal { literal: String, kind: String, language: String },
+    Literal { literal: String, kind: String, language: Option<String> },
 }
+
+const RDF_LANG_STRING: &str = "http://www.w3.org/1999/02/22-rdf-syntax-ns#langString";
+const XSD_STRING: &str = "http://www.w3.org/2001/XMLSchema#string";
 
 impl Node {
     fn from_blank_node_label(pair: Pair<Rule>) -> Node {
@@ -89,12 +92,12 @@ impl Node {
                     Rule::iriref => Node::Literal {
                         literal,
                         kind: String::from_pair(piece2),
-                        language: "".to_owned()
+                        language: None
                     },
                     Rule::langtag => Node::Literal {
                         literal,
-                        kind: "".to_owned(),
-                        language: String::from_pair(piece2)
+                        kind: RDF_LANG_STRING.to_owned(),
+                        language: Some(piece2.clone().into_span().as_str().to_owned())
                     },
                     _ => unreachable!()
                 }
@@ -102,8 +105,8 @@ impl Node {
             None => {
                 Node::Literal {
                     literal,
-                    kind: "".to_owned(),
-                    language: "".to_owned()
+                    kind: XSD_STRING.to_owned(),
+                    language: None
                 }
             }
         }
