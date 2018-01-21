@@ -116,7 +116,7 @@ pub struct Quad {
     pub subject:     Node,
     pub predicate:   Node,
     pub object:      Node,
-    pub graph_label: Node,
+    pub graph_label: Option<Node>,
 }
 
 impl Quad {
@@ -151,15 +151,15 @@ impl Quad {
         let _graph = pieces.next();
 
         let graph_label = match _graph {
-            None => Node::IriRef { iri: "_:default".to_owned() },
-            _ => {
+            None => None,
+            _ => Some({
                 let __graph = _graph.unwrap().into_inner().next().unwrap();
                 match __graph.as_rule() {
                     Rule::iriref => Node::from_iriref(__graph),
                     Rule::blank_node_label => Node::from_blank_node_label(__graph),
                     _ => unreachable!()
                 }
-            }
+            })
         };
 
         Quad {
