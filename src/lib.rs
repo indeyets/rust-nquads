@@ -18,11 +18,6 @@ trait NQuadsString {
 
 impl NQuadsString for String {
     fn from_pair(pair: Pair<Rule>) -> String {
-        for inner_pair in pair.clone().into_inner() {
-            println!("-> Rule:    {:?}", inner_pair.as_rule());
-            println!("-> Text:    {}", inner_pair.clone().into_span().as_str());
-        }
-
         let mut result = String::new();
 
         for piece in pair.into_inner() {
@@ -46,8 +41,6 @@ impl NQuadsString for String {
                 }
             };
         }
-
-        println!("FOUND:    {}", result.clone().as_str());
 
         result
     }
