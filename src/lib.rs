@@ -184,16 +184,6 @@ pub fn parse(input: &str) -> Vec<Quad> {
     let mut vec = Vec::new();
 
     for pair in pairs {
-//        // A pair is a combination of the rule which matched and a span of input
-//        println!("Rule:    {:?}", pair.as_rule());
-//        //println!("Span:    {:?}", pair.clone().into_span());
-//        println!("Text:    {}", pair.clone().into_span().as_str());
-//
-//        for inner_pair in pair.into_inner() {
-//            println!("-> Rule:    {:?}", inner_pair.as_rule());
-//            println!("-> Text:    {}", inner_pair.clone().into_span().as_str());
-//        }
-
         vec.push(Quad::from_statement(pair))
     }
 
