@@ -47,3 +47,9 @@ fn parse_statement_with_default_graph() {
 
     assert_eq!(expectation_0, quads[0]);
 }
+
+#[test]
+fn parse_broken_document() {
+    let result = nquads::parse("foobar");
+    assert!(result.is_err());
+}

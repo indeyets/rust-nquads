@@ -1,4 +1,4 @@
-expression = _{ statement? ~ (eol ~ statement)* ~ eol? }
+expression = _{ soi ~ statement? ~ (eol ~ statement)* ~ eol? ~ eoi }
 statement =   { subject ~ predicate ~ object ~ graph_label? ~ "." }
 
 subject =     { _iriref | _blank_node_label }
