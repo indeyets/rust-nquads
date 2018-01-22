@@ -1,7 +1,7 @@
 extern crate nquads;
 
-use nquads::Node::*;
-use nquads::Quad;
+use nquads::types::Node::*;
+use nquads::types::Quad;
 
 #[test]
 fn parse_2_statements() {

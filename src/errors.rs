@@ -3,7 +3,7 @@ extern crate pest;
 use std::error;
 use std::fmt;
 
-use grammar::*;
+use parser::*;
 
 
 #[derive(Debug)]

@@ -1,6 +1,6 @@
 extern crate nquads;
 
-use nquads::Node::*;
+use nquads::types::Node::*;
 
 
 #[test]
