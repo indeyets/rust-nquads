@@ -5,8 +5,10 @@ use nquads::Quad;
 
 #[test]
 fn parse_2_statements() {
-    let quads = nquads::parse("_:alice <http://xmlns.com/foaf/0.1/knows> _:bob <http://example.org/graphs/john> . #test\n_:bob <http://xmlns.com/foaf/0.1/knows> _:alice <http://example.org/graphs/james> .");
+    let result = nquads::parse("_:alice <http://xmlns.com/foaf/0.1/knows> _:bob <http://example.org/graphs/john> . #test\n_:bob <http://xmlns.com/foaf/0.1/knows> _:alice <http://example.org/graphs/james> .");
+    assert!(result.is_ok());
 
+    let quads = result.unwrap();
     assert_eq!(2, quads.len());
 
     let expectation_0 = Quad {
@@ -30,8 +32,10 @@ fn parse_2_statements() {
 
 #[test]
 fn parse_statement_with_default_graph() {
-    let quads = nquads::parse("_:alice <http://xmlns.com/foaf/0.1/knows> _:bob .");
+    let result = nquads::parse("_:alice <http://xmlns.com/foaf/0.1/knows> _:bob .");
+    assert!(result.is_ok());
 
+    let quads = result.unwrap();
     assert_eq!(1, quads.len());
 
     let expectation_0 = Quad {

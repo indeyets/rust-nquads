@@ -7,6 +7,8 @@ use std::u32;
 use pest::iterators::Pair;
 use pest::Parser;
 
+mod errors;
+use errors::ParseError;
 
 mod grammar;
 use grammar::*;
@@ -173,30 +175,48 @@ impl Quad {
     }
 }
 
-pub fn parse(input: &str) -> Vec<Quad> {
-    let pairs = NQuadsParser::parse(Rule::expression, input).unwrap_or_else(|e| panic!("{}", e));
+pub fn parse(input: &str) -> Result<Vec<Quad>, ParseError> {
+    match NQuadsParser::parse(Rule::expression, input) {
+        Ok(pairs) => {
+            let mut vec = Vec::new();
 
-    let mut vec = Vec::new();
+            for pair in pairs {
+                vec.push(Quad::from_statement(pair))
+            }
 
-    for pair in pairs {
-        vec.push(Quad::from_statement(pair))
+            Ok(vec)
+        },
+        Err(e) => {
+            Err(errors::ParseError::Pest(e))
+        }
     }
 
-    vec
 }
 
-pub fn parse_iriref(input: &str) -> Node {
-    let pairs = NQuadsParser::parse(Rule::_iriref, input).unwrap_or_else(|e| panic!("{}", e));
-    match pairs.clone().next() {
-        Some(literal) => Node::from_iriref(literal),
-        None => panic!("no iriref found")
+pub fn parse_iriref(input: &str) -> Result<Node, ParseError> {
+    match NQuadsParser::parse(Rule::_iriref, input) {
+        Ok(pairs) => {
+            match pairs.clone().next() {
+                Some(literal) => Ok(Node::from_iriref(literal)),
+                None => Err(errors::ParseError::EmptyInput)
+            }
+        },
+        Err(e) => {
+            Err(errors::ParseError::Pest(e))
+        }
     }
 }
 
-pub fn parse_literal(input: &str) -> Node {
-    let pairs = NQuadsParser::parse(Rule::literal, input).unwrap_or_else(|e| panic!("{}", e));
-    match pairs.clone().next() {
-        Some(literal) => Node::from_literal(literal),
-        None => panic!("no literal found")
+pub fn parse_literal(input: &str) -> Result<Node, ParseError> {
+    match NQuadsParser::parse(Rule::literal, input) {
+        Ok(pairs) => {
+            match pairs.clone().next() {
+                Some(literal) => Ok(Node::from_literal(literal)),
+                None => Err(errors::ParseError::EmptyInput)
+            }
+        },
+        Err(e) => {
+            Err(errors::ParseError::Pest(e))
+        }
     }
 }
